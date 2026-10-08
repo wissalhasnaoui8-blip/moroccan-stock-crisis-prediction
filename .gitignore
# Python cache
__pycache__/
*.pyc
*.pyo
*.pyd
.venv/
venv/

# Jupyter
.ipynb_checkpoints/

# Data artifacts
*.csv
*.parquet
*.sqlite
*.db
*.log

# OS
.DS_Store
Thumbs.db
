@@ -1,0 +1,207 @@
+# Moroccan Stock Crisis Prediction Database
+
+This repository provides the foundation for a multimodal database designed to predict stock market crises on the Moroccan exchange (Casablanca / MADEX / MASI), using:
+
+- Market data
+- French textual data (news, sentiment, press, statements)
+- Macroeconomic indicators
+
+The database is designed for the period:
+
+- Start: 2016-01-01
+- End: 2026-07-31
+
+## Objective
+
+Build a temporal dataset for crisis forecasting that combines low-frequency macroeconomic signals, daily market behavior, and French-language textual signals from financial and economic sources.
+
+## Data model
+
+The database includes three main modalities:
+
+1. Market data
+   - Daily OHLCV, volume, returns, volatility, drawdown, sector trends, index metrics
+2. French textual data
+   - Press articles, headlines, official statements, market sentiment, topic labels
+3. Macroeconomic data
+   - Inflation, exchange rates, interest rates, GDP, unemployment, public debt, industrial production, and balance-of-pay indicators
+
+## Repository structure
+
+```text
+.
+├── README.md
+├── .gitignore
+├── requirements.txt
+├── data/
+│   ├── README.md
+│   └── .gitkeep
+├── docs/
+│   └── data_sources.md
+├── sql/
+│   └── database_schema.sql
+├── scripts/
+│   ├── etl_market_data.py
+│   ├── etl_macro_data.py
+│   ├── etl_text_data.py
+│   └── build_multimodal_dataset.py
+└── notebooks/
+    └── README.md
+```
+
+## Core table design
+
+### 1) market_daily
+
+Stores daily market information for Moroccan equities and indices.
+
+Columns:
+- date
+- exchange
+- symbol
+- company_name
+- sector
+- market_cap
+- open
+- high
+- low
+- close
+- adj_close
+- volume
+- daily_return
+- rolling_volatility_20d
+- drawdown
+- is_index
+- source
+
+### 2) text_articles
+
+Stores French-language articles and headlines related to market sentiment and macroeconomic conditions.
+
+Columns:
+- article_id
+- date
+- source_name
+- source_type
+- language
+- title
+- content
+- url
+- topic
+- sentiment_score
+- sentiment_label
+- urgency_score
+- is_market_related
+- region
+
+### 3) macro_indicators
+
+Stores macroeconomic series at daily/monthly/quarterly frequency.
+
+Columns:
+- date
+- indicator_name
+- indicator_group
+- value
+- unit
+- source
+- frequency
+
+### 4) crisis_labels
+
+Stores target labels for crisis periods and risk events.
+
+Columns:
+- date
+- crisis_label
+- label_type
+- confidence
+- notes
+
+### 5) multimodal_daily_dataset
+
+A merged, daily feature table used for modeling.
+
+Columns:
+- date
+- market_index
+- market_return
+- market_volatility
+- sentiment_index
+- macro_index
+- macro_factor_1
+- macro_factor_2
+- crisis_label
+- crisis_window
+
+## Crisis target definition
+
+A practical target can be built using one or more of the following:
+
+- large daily index drawdown
+- prolonged negative return windows
+- volatility regime shift
+- sector-wide stress indicators
+- crisis events declared by financial authorities or media
+
+Recommended labels:
+
+- 0 = normal market regime
+- 1 = pre-crisis risk phase
+- 2 = crisis / stress regime
+
+## Example sources
+
+### Market data
+- Casablanca Stock Exchange official data
+- Bloomberg / Refinitiv (licensed)
+- Yahoo Finance for public historical prices when available
+- Banque Centrale Populaire / local market reports when access is available
+
+### Textual data (French)
+- Les Eco / Ecofin / Finances News Hebdo
+- L'Economiste
+- Maroc Economie / Maroc Tribune / Medias24
+- official statements from Bank Al-Maghrib
+- ministerial and public economics releases
+- French-language financial news sources covering Morocco
+
+### Macroeconomic data
+- Bank Al-Maghrib
+- Haut Commissariat au Plan (HCP)
+- World Bank
+- IMF
+- OECD
+- FAO / trading statistics where relevant
+
+## Recommended data collection strategy
+
+1. Download historical market prices at the daily level.
+2. Retrieve and clean French headlines and market articles.
+3. Aggregate macroeconomic data at matching dates.
+4. Compute sentiment and macro risk indicators.
+5. Merge on date and create crisis labels.
+6. Train a multimodal forecasting model (transformers, tabular models, temporal fusion models, or hybrid architectures).
+
+## Important note
+
+This repository is structured as a data-engineering starting point. For a production-grade system, you may need access to licensed financial feeds and formal rights to redistribute news data.
+
+## Quick start
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Then run:
+
+```bash
+python scripts/build_multimodal_dataset.py
+```
+
+---
+
+This project is intended for academic and applied research on Moroccan market stress prediction using multimodal learning.
+"},{

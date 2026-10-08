@@ -1,0 +1,25 @@
+# Python dependencies for the multimodal crisis prediction project
+
+pandas>=2.0.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+python-dateutil>=2.8.2
+SQLAlchemy>=2.0.0
+jupyter>=1.0.0
+
+# optional: if you use financial data APIs
+yfinance>=0.2.0
+
+# optional: NLP for French sentiment
+transformers>=4.40.0
+sentence-transformers>=2.3.0
+spacy>=3.0.0
+
+# optional: for parsing dates and API ingestion
+pydantic>=2.0.0
+
+# optional: visualization
+matplotlib>=3.8.0
+seaborn>=0.13.0
